@@ -1,40 +1,32 @@
-variable "region" {
-  type        = string
-  default = "us-east-1"
-}
-
 variable "env_code" {
-  type        = string
-  default = "training"
+  type    = string
+ }
+
+ variable "region" {
+  type = string
 }
 
 variable "public" {
-  type        = string
-  default = "FrontEnd"
+  type    = string
 }
 
 variable "private" {
-  type        = string
-  default = "BackEnd"
+  type    = string
 }
 
 variable "igw" {
-  type        = string
-  default = "main"
+  type    = string
 }
 
 variable "ngw" {
-  type        = string
-  default = "main"
+  type    = string
 }
 
 variable "rt" {
-  type        = string
-  default = "public"
+  type    = string
 }
 
 variable "rtp" {
-  type        = string
-  default = "private"
+  type    = string
 }
 

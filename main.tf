@@ -5,6 +5,7 @@ terraform {
       version = "~> 3.0"
     }
   }
+
 }
 
 provider "aws" {
@@ -32,7 +33,7 @@ resource "aws_subnet" "public" {
   cidr_block = local.public_cidr[count.index]
 
   tags = {
-    Name = "var.public${count.index}"
+    Name = "public${count.index}"
   }
 }
 
@@ -43,7 +44,7 @@ resource "aws_subnet" "private" {
   cidr_block = local.private_cidr[count.index]
 
   tags = {
-    Name = "var.private${count.index}"
+    Name = "private${count.index}"
   }
 }
 
