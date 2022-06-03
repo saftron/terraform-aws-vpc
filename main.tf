@@ -5,6 +5,7 @@ terraform {
       version = "~> 3.0"
     }
   }
+
 }
 
 provider "aws" {
@@ -51,7 +52,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "main"
+    Name = "var.igw"
   }
 }
 
@@ -68,7 +69,7 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public[count.index].id
 
   tags = {
-    Name = "main"
+    Name = "${var.ngw}"
   }
 }
 
@@ -81,7 +82,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "public"
+    Name = "var.rt"
   }
 }
 
@@ -96,7 +97,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "private${count.index}"
+    Name = "var.rtp${count.index}"
   }
 }
 
