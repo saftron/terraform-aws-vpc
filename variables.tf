@@ -1,4 +1,9 @@
+variable "region" {
+  type    = string
+  default = "us-east-1"
+}
+
 variable "env_code" {
-  type        = string
-  description = "A short form of the folder level resources (environment)\n"
+  type    = string
+  default = "training"
 }
