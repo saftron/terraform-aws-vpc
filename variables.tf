@@ -1,9 +1,9 @@
 variable "region" {
-  type        = string
+  type    = string
   default = "us-east-1"
 }
 
 variable "env_code" {
-  type        = string
+  type    = string
   default = "training"
 }
