@@ -1,60 +1,75 @@
-resource "aws_instance" "web" {
-  ami           = "ami-0022f774911c1d690"
-  instance_type = "t2.micro"
-  #security_groups = ["aws_security_group.tf_sg.id"]
-  key_name = "training"
-  tags = {
-    Name = "HelloWorld"
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
-  /*user_data = <<EOF
-#! /bin/bash
-yum update -y
-yum install -y httpd
-systemctl start httpd && systemctl enable httpd
-echo “Hello World from $(hostname -f)” > /var/www/html/index.html
-EOF*/
 
-  user_data = file("script.sh")
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["aws-marketplace"]
+}
+
+data "aws_ami" "amazonlinux" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-kernel-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+  owners = ["137112412989"]
 
 }
 
+output "ubuntu" {
+  value = data.aws_ami.ubuntu.id
+}
+
+output "amazonlinux" {
+  value = data.aws_ami.amazonlinux.id
+}
+
+locals {
+  ingress_rules = [{
+    port        = 443
+    description = "Ingress rules for port 443"
+    },
+    {
+      port        = 80
+      description = "Ingree rules for port 80"
+  }]
+}
+
 resource "aws_security_group" "tf_sg" {
-  name        = "Security group using terraform"
-  description = "Security group using terraform"
-  vpc_id      = "vpc-0b98a050f32fec47f"
+  name        = "${var.vpc_name}-default"
+  description = "The ID of the VPC that the instance security group belongs to."
+  vpc_id      = aws_vpc.main.id
 
-  ingress {
-    description      = "HTTPS"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
+  dynamic "ingress" {
+    for_each = local.ingress_rules
 
-  ingress {
-    description      = "HTTP"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  ingress {
-    description      = "SSH"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    content {
+      description = ingress.value.description
+      from_port   = ingress.value.port
+      to_port     = ingress.value.port
+      protocol    = "tcp"
+      cidr_blocks = ["${var.my_public_ip}"]
+    }
   }
 
   egress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    cidr_blocks      = ["${var.my_public_ip}"]
     ipv6_cidr_blocks = ["::/0"]
   }
 
