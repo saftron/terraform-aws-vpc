@@ -61,7 +61,7 @@ resource "aws_security_group" "tf_sg" {
       from_port   = ingress.value.port
       to_port     = ingress.value.port
       protocol    = "tcp"
-      cidr_blocks = ["${var.my_public_ip}"]
+      cidr_blocks = [var.my_public_ip]
     }
   }
 
@@ -69,7 +69,7 @@ resource "aws_security_group" "tf_sg" {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
-    cidr_blocks      = ["${var.my_public_ip}"]
+    cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
 
