@@ -8,10 +8,9 @@ terraform {
 }
 
 provider "aws" {
-  region = "var.region"
+  region = "us-east-1"
 }
 
-# Create a VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
 
@@ -32,7 +31,7 @@ resource "aws_subnet" "public" {
   cidr_block = local.public_cidr[count.index]
 
   tags = {
-    Name = "var.public${count.index}"
+    Name = "${var.env_code}-public${count.index}"
   }
 }
 
@@ -43,7 +42,7 @@ resource "aws_subnet" "private" {
   cidr_block = local.private_cidr[count.index]
 
   tags = {
-    Name = "var.private${count.index}"
+    Name = "${var.env_code}-private${count.index}"
   }
 }
 
@@ -51,7 +50,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "var.igw"
+    Name = var.env_code
   }
 }
 
@@ -68,7 +67,7 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public[count.index].id
 
   tags = {
-    Name = "${var.ngw}"
+    Name = "${var.env_code}${count.index}"
   }
 }
 
@@ -81,7 +80,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "var.rt"
+    Name = "${var.env_code}-public"
   }
 }
 
@@ -96,7 +95,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "var.rtp${count.index}"
+    Name = "${var.env_code}-private${count.index}"
   }
 }
 
