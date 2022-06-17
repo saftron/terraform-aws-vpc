@@ -74,6 +74,6 @@ resource "aws_security_group" "tf_sg" {
   }
 
   tags = {
-    Name = "tf_sg"
+    Name = "tf_sg\n\n"
   }
 }
