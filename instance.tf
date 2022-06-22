@@ -1,18 +1,3 @@
-data "aws_ami" "ubuntu" {
-  most_recent = true
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["aws-marketplace"]
-}
-
 data "aws_ami" "amazonlinux" {
   most_recent = true
 
@@ -27,10 +12,6 @@ data "aws_ami" "amazonlinux" {
   }
   owners = ["137112412989"]
 
-}
-
-output "ubuntu" {
-  value = data.aws_ami.ubuntu.id
 }
 
 output "amazonlinux" {
