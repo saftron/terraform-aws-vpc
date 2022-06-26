@@ -14,10 +14,6 @@ data "aws_ami" "amazonlinux" {
 
 }
 
-output "amazonlinux" {
-  value = data.aws_ami.amazonlinux.id
-}
-
 locals {
   ingress_rules = [{
     port        = 443
