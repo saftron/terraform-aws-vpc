@@ -31,7 +31,7 @@ resource "aws_subnet" "public" {
   cidr_block = local.public_cidr[count.index]
 
   tags = {
-    Name = "${var.env_code}-public${count.index}"
+    Name = "${var.ui}-public${count.index}"
   }
 }
 
@@ -42,7 +42,7 @@ resource "aws_subnet" "private" {
   cidr_block = local.private_cidr[count.index]
 
   tags = {
-    Name = "${var.env_code}-private${count.index}"
+    Name = "${var.db}-private${count.index}"
   }
 }
 
@@ -50,7 +50,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = var.env_code
+    Name = var.ui
   }
 }
 
@@ -67,7 +67,7 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public[count.index].id
 
   tags = {
-    Name = "${var.env_code}${count.index}"
+    Name = "${var.db}${count.index}"
   }
 }
 
@@ -80,7 +80,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "${var.env_code}-public"
+    Name = "${var.ui}-public"
   }
 }
 
@@ -95,7 +95,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "${var.env_code}-private${count.index}"
+    Name = "${var.db}-private${count.index}"
   }
 }
 
