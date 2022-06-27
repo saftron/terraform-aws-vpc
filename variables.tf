@@ -3,14 +3,9 @@ variable "env_code" {
   default = "training"
 }
 
-variable "ui" {
+variable "env" {
   type    = string
-  default = "frontend"
-}
-
-variable "db" {
-  type    = string
-  default = "backend"
+  description = "Deployment environment"
 }
 
 variable "vpc_name" {

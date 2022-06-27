@@ -50,7 +50,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = var.ui
+    Name = var.env
   }
 }
 
@@ -67,7 +67,7 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public[count.index].id
 
   tags = {
-    Name = "${var.db}${count.index}"
+    Name = "${var.env-code}${count.index}"
   }
 }
 
@@ -80,7 +80,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "${var.ui}-public"
+    Name = "${var.env_code}-public"
   }
 }
 
@@ -95,7 +95,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "${var.db}-private${count.index}"
+    Name = "${var.env}-private${count.index}"
   }
 }
 
