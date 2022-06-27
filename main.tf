@@ -31,7 +31,7 @@ resource "aws_subnet" "public" {
   cidr_block = local.public_cidr[count.index]
 
   tags = {
-    Name = "${var.ui}-public${count.index}"
+    Name = "${var.env}-public${count.index}"
   }
 }
 
@@ -42,7 +42,7 @@ resource "aws_subnet" "private" {
   cidr_block = local.private_cidr[count.index]
 
   tags = {
-    Name = "${var.db}-private${count.index}"
+    Name = "${var.env}-private${count.index}"
   }
 }
 
@@ -67,7 +67,7 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public[count.index].id
 
   tags = {
-    Name = "${var.env-code}${count.index}"
+    Name = "${var.env_code}${count.index}"
   }
 }
 
