@@ -3,11 +3,6 @@ variable "env_code" {
   default = "training"
 }
 
-variable "env" {
-  type    = string
-  description = "Deployment environment"
-}
-
 variable "vpc_name" {
   type    = string
   default = "default"

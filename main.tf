@@ -31,7 +31,7 @@ resource "aws_subnet" "public" {
   cidr_block = local.public_cidr[count.index]
 
   tags = {
-    Name = "${var.env}-public${count.index}"
+    Name = "${var.env_code}-public${count.index}"
   }
 }
 
@@ -42,7 +42,7 @@ resource "aws_subnet" "private" {
   cidr_block = local.private_cidr[count.index]
 
   tags = {
-    Name = "${var.env}-private${count.index}"
+    Name = "${var.env_code}-private${count.index}"
   }
 }
 
@@ -95,7 +95,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "${var.env}-private${count.index}"
+    Name = "${var.env_code}-private${count.index}"
   }
 }
 
