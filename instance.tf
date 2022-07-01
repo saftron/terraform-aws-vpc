@@ -11,13 +11,42 @@ data "aws_ami" "amazonlinux" {
     values = ["hvm"]
   }
   owners = ["137112412989"]
+}
 
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.amazonlinux.id
+  instance_type = "t2.micro"
+  count         = 1
+  vpc_security_group_ids = [
+    "sg-0adaeb619fefed2b3"
+  ]
+
+  user_data = file("script.sh")
+
+  tags = {
+    Name = "${var.prefix}${count.index}"
+  }
+}
+
+resource "aws_key_pair" "ubuntu_key" {
+  key_name   = "ec2-key"
+  public_key = tls_private_key.rsa.public_key_openssh
+}
+
+resource "tls_private_key" "rsa" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "local_file" "ec2-key" {
+  content  = tls_private_key.rsa.private_key_pem
+  filename = "ec2-key"
 }
 
 resource "aws_security_group" "tf_sg" {
   name        = "${var.vpc_name}-default"
   description = "The ID of the VPC that the instance security group belongs to."
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = "vpc-0b98a050f32fec47f"
 
   ingress {
     description = "SSH"
