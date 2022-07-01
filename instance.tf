@@ -24,7 +24,7 @@ resource "aws_instance" "web" {
   user_data = file("script.sh")
 
   tags = {
-    Name = "${var.prefix}${count.index}"
+    Name = "${var.env_code}${count.index}"
   }
 }
 
@@ -46,7 +46,7 @@ resource "local_file" "ec2-key" {
 resource "aws_security_group" "tf_sg" {
   name        = "${var.vpc_name}-default"
   description = "The ID of the VPC that the instance security group belongs to."
-  vpc_id      = "vpc-0b98a050f32fec47f"
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     description = "SSH"
