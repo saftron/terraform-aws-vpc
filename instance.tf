@@ -18,7 +18,7 @@ resource "aws_instance" "web" {
   instance_type = "t2.micro"
   count         = 1
   vpc_security_group_ids = [
-    "sg-0adaeb619fefed2b3"
+    aws_security_group.tf_sg.id
   ]
 
   user_data = file("script.sh")
