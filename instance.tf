@@ -16,7 +16,8 @@ data "aws_ami" "amazonlinux" {
 resource "aws_instance" "web" {
   ami           = data.aws_ami.amazonlinux.id
   instance_type = "t2.micro"
-  count         = 1
+  subnet_id     = aws_subnet.public[0].id
+
   vpc_security_group_ids = [
     aws_security_group.tf_sg.id
   ]
@@ -24,7 +25,7 @@ resource "aws_instance" "web" {
   user_data = file("script.sh")
 
   tags = {
-    Name = "${var.env_code}${count.index}"
+    Name = "${var.env_code}-web"
   }
 }
 
