@@ -27,8 +27,9 @@ locals {
 resource "aws_subnet" "public" {
   count = length(local.public_cidr)
 
-  vpc_id     = aws_vpc.main.id
-  cidr_block = local.public_cidr[count.index]
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = local.public_cidr[count.index]
+  map_public_ip_on_launch = true
 
   tags = {
     Name = "${var.env_code}-public${count.index}"
