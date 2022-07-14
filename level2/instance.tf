@@ -47,7 +47,6 @@ resource "local_file" "ec2-key" {
 resource "aws_security_group" "tf_sg" {
   name        = "${var.vpc_name}-default"
   description = "The ID of the VPC that the instance security group belongs to."
-  vpc_id      = aws_vpc.main.id
 
   ingress {
     description = "SSH"
@@ -75,4 +74,17 @@ resource "aws_security_group" "tf_sg" {
   tags = {
     Name = "tf_sg\n\n"
   }
+}
+
+data "terraform_remote_state" "level1" {
+  backend = "s3"
+  config = {
+    bucket = "saftronbucket"
+    key    = "level1.tfstate"
+    region = "us-east-1"
+  }
+}
+
+resource "ec2_instance" {
+  vpc_id = data.terraform_remote_state.level1.outputs.vpc_id
 }
