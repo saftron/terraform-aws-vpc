@@ -16,7 +16,7 @@ data "aws_ami" "amazonlinux" {
 resource "aws_instance" "web" {
   ami           = data.aws_ami.amazonlinux.id
   instance_type = "t2.micro"
-  subnet_id     = aws_subnet.public[0].id
+  subnet_id     = data.terraform_remote_state.level1.outputs.public_subnet_id[0]
 
   vpc_security_group_ids = [
     aws_security_group.tf_sg.id
@@ -45,9 +45,9 @@ resource "local_file" "ec2-key" {
 }
 
 resource "aws_security_group" "tf_sg" {
-  name        = "${var.vpc_name}-default"
+  name        = "${var.env_code}-default"
   description = "The ID of the VPC that the instance security group belongs to."
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = data.terraform_remote_state.level1.outputs.vpc_id
 
   ingress {
     description = "SSH"
