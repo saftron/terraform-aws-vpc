@@ -40,6 +40,10 @@ resource "aws_subnet" "public" {
   }
 }
 
+output "pub_id" {
+  value = aws_subnet.public.id
+}
+
 resource "aws_subnet" "private" {
   count = length(local.private_cidr)
 

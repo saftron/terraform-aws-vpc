@@ -16,7 +16,7 @@ data "aws_ami" "amazonlinux" {
 resource "aws_instance" "web" {
   ami           = data.aws_ami.amazonlinux.id
   instance_type = "t2.micro"
-  subnet_id     = aws_subnet.public[0].id
+  vpc_id        = "${data.terraform_remote_state.level1.outputs.vpc_id}"
 
   vpc_security_group_ids = [
     aws_security_group.tf_sg.id
@@ -80,11 +80,7 @@ data "terraform_remote_state" "level1" {
   backend = "s3"
   config = {
     bucket = "saftronbucket"
-    key    = "level1.tfstate"
+    key    = "level2//terraform.tfstate\n"
     region = "us-east-1"
   }
-}
-
-resource "ec2_instance" {
-  vpc_id = data.terraform_remote_state.level1.outputs.vpc_id
 }
