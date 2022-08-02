@@ -17,7 +17,7 @@ resource "aws_autoscaling_group" "web" {
   max_size         = 3
 
   health_check_type    = "ELB"
-  load_balancers       = [aws_lb.jag-test-lb.id]
+  target_group_arns       = [aws_lb_target_group.jag-alb-tg.arn]
   launch_configuration = aws_launch_configuration.web.name
   enabled_metrics = [
     "GroupMinSize",
