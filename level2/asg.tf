@@ -1,17 +1,14 @@
 resource "aws_launch_configuration" "web" {
-  name_prefix                 = "web-"
+  name_prefix                 = "${var.env_code}-"
   image_id                    = data.aws_ami.amazonlinux.id
   instance_type               = "t2.micro"
   security_groups             = [aws_security_group.tf_sg.id]
   associate_public_ip_address = true
   user_data                   = file("script.sh")
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_autoscaling_group" "web" {
-  name             = "${aws_launch_configuration.web.name}-asg"
+  name             = "${var.env_code}-asg"
   min_size         = 1
   desired_capacity = 2
   max_size         = 3
@@ -27,7 +24,7 @@ resource "aws_autoscaling_group" "web" {
     "GroupTotalInstances"
   ]
   metrics_granularity = "1Minute"
-  vpc_zone_identifier = [data.terraform_remote_state.level1.outputs.public_subnet_id[0], data.terraform_remote_state.level1.outputs.public_subnet_id[1]]
+  vpc_zone_identifier = [data.terraform_remote_state.level1.outputs.private_subnet_id[0], data.terraform_remote_state.level1.outputs.private_subnet_id[1]]
   lifecycle {
     create_before_destroy = true
   }
