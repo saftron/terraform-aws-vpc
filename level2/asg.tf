@@ -14,7 +14,7 @@ resource "aws_autoscaling_group" "web" {
   max_size         = 3
 
   health_check_type    = "ELB"
-  target_group_arns       = [aws_lb_target_group.jag-alb-tg.arn]
+  target_group_arns    = [aws_lb_target_group.jag-alb-tg.arn]
   launch_configuration = aws_launch_configuration.web.name
   enabled_metrics = [
     "GroupMinSize",
@@ -25,9 +25,6 @@ resource "aws_autoscaling_group" "web" {
   ]
   metrics_granularity = "1Minute"
   vpc_zone_identifier = [data.terraform_remote_state.level1.outputs.private_subnet_id[0], data.terraform_remote_state.level1.outputs.private_subnet_id[1]]
-  lifecycle {
-    create_before_destroy = true
-  }
   tag {
     key                 = "Name"
     value               = "web"
